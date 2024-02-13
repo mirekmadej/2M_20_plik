@@ -1,12 +1,14 @@
-﻿namespace _2M_20_plik
+﻿using System.Runtime.CompilerServices;
+
+namespace _2M_20_plik
 {
     /// <summary>
     /// klasa Pytanie  służy do przechowywania pytania i odpowiedzi
     /// </summary>
     class Pytanie
     {
-
-        private string pytanie, o1, o2, o3, o4, odp;
+        public string odp { get; private set; }
+        private string pytanie, o1, o2, o3, o4;
  
 
         /// <summary>
@@ -29,7 +31,7 @@
         }
         public override string ToString()
         {
-            return $"{pytanie}\n{o1}\n{o2}\n{o3}\n{o4}\n*{odp}\n";
+            return $"{pytanie}\nA) {o1}\nb) {o2}\nC) {o3}\nD) {o4}\n*{odp}";
         }
     }
     internal class Program
@@ -45,9 +47,10 @@
                 {
                     int p = s.IndexOf(" ");
                     int g = s.IndexOf("*");
-                    s = s.Substring(p+1, s.Length-p-1);
                     if (g >= 0)
-                        odp = s;
+                        odp = s.Substring(0,1);
+                    s = s.Substring(p+1, s.Length-p-1);
+
                     return s;
                 }
                 while(p.Peek() > -1)
@@ -63,8 +66,36 @@
                 }
             }
 
+            int zadajPytanie(Pytanie p)
+            {
+                Console.WriteLine(p);
+                Console.Write("odpowiedź: ");
+                string o = Console.ReadLine().ToUpper();
+                if (o == p.odp)
+                {
+                    Console.WriteLine("dobrze");
+                    return 1;
+                }
+                else
+                {
+                    Console.WriteLine("źle");
+                    return 0;
+                }                    
+            }
 
-            Console.WriteLine(pytania[0]);
+            var pytania2 = new List<Pytanie>(pytania);
+            int ile = 0;
+            Random r = new Random();
+            for(int i=0; i<5; i++)
+            {
+                int p = r.Next(pytania2.Count-1);
+                ile += zadajPytanie(pytania2[p]);
+                pytania2.RemoveAt(p);
+            }
+            Console.WriteLine($"poprawnych odpowiedzi: {ile}");
+
+            
+
             
         }
     }
