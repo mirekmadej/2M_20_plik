@@ -1,8 +1,23 @@
 ﻿namespace _2M_20_plik
 {
+    /// <summary>
+    /// klasa Pytanie  służy do przechowywania pytania i odpowiedzi
+    /// </summary>
     class Pytanie
     {
+
         private string pytanie, o1, o2, o3, o4, odp;
+ 
+
+        /// <summary>
+        /// konstruktor klasy Pytanie
+        /// </summary>
+        /// <param name="pytanie">string reprezentujący pytanie</param>
+        /// <param name="o1">string reprezentujący odpowiedź 1</param>
+        /// <param name="o2">string reprezentujący odpowiedź 2</param>
+        /// <param name="o3">string reprezentujący odpowiedź 3</param>
+        /// <param name="o4">string reprezentujący odpowiedź 4</param>
+        /// <param name="odp">string reprezentujący poprawną odpowiedź</param>
         public Pytanie(string pytanie, string o1, string o2, string o3, string o4, string odp)
         {
             this.pytanie = pytanie;
@@ -14,7 +29,7 @@
         }
         public override string ToString()
         {
-            return $"{pytanie}\n{o1}\n{o2}\n{o3}\n{o4}\n";
+            return $"{pytanie}\n{o1}\n{o2}\n{o3}\n{o4}\n*{odp}\n";
         }
     }
     internal class Program
@@ -23,28 +38,33 @@
         static void Main(string[] args)
         {
             Pytanie p1;// = new Pytanie("2+2=", "1", "2", "3", "4","4");
-            string pytanie, o1, o2, o3, o4,odp;
+            string pytanie, o1, o2, o3, o4,odp="";
             using(TextReader p = File.OpenText("testy.txt"))
             {
+                string czysc(string s)
+                {
+                    int p = s.IndexOf(" ");
+                    int g = s.IndexOf("*");
+                    s = s.Substring(p+1, s.Length-p-1);
+                    if (g >= 0)
+                        odp = s;
+                    return s;
+                }
                 while(p.Peek() > -1)
                 {
-                    pytanie = p.ReadLine();
-                    o1 = p.ReadLine();
-                    o2 = p.ReadLine();
-                    o3 = p.ReadLine();
-                    o4 = p.ReadLine();
+                    pytanie = czysc(p.ReadLine());
+                    o1 = czysc(p.ReadLine());
+                    o2 = czysc(p.ReadLine());
+                    o3 = czysc(p.ReadLine());
+                    o4 = czysc(p.ReadLine());
                     p.ReadLine();
-                    odp = o1; //tymczasowo
+                    
                     pytania.Add(new Pytanie(pytanie, o1, o2, o3, o4, odp));
                 }
             }
-           
 
-            foreach (Pytanie p in pytania)
-            { 
-                Console.WriteLine(p.ToString()); 
 
-            }
+            Console.WriteLine(pytania[0]);
             
         }
     }
